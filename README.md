@@ -36,7 +36,9 @@ subnet 10.2.1.0 netmask 255.255.255.0 {
 
 sudo nano /etc/default/isc-dhcp-server
 
+```yaml
 INTERFACESv4="enp0s8"
+```
 
 ### Configuration des IP des VPCS
 
