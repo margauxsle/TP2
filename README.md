@@ -10,39 +10,29 @@ On câble tous les équipements entre eux en suivant la topo
 
 sudo nano /etc/netplan/01-network-manager-all.yaml:
 
+```yaml
 network:
-
   version: 2
-
   renderer: NetworkManager
-
   ethernets:
-
     enp0s8:
-
       dhcp4: no
-
       addresses:
-
         - 10.2.1.11/24
-
       routes:
-
         - to: default
-
           via: 10.2.1.254
+```
 
 sudo nano /etc/dhcp/dhcpd.conf:
 
+```yaml
 subnet 10.2.1.0 netmask 255.255.255.0 {
-
     range 10.2.1.100 10.2.1.200;
-
     option subnet-mask 255.255.255.0;
-
     option routers 10.2.1.254;
-
 }
+```
 
 sudo nano /etc/default/isc-dhcp-server
 
@@ -59,54 +49,40 @@ Pour les autres VPCS, on utilise la commande "dhcp" pour récupérer une ip avec
 
 Configurer l'interface pour obtenir une adresse IP via DHCP, dans un terminal du router on entre:
 
+```yaml
 conf t
-
 interface FastEthernet1/0
-
 ip address dhcp
-
 no shutdown
-
 exit
-
 exit
-
 sh ip int br
-
 ping 8.8.8.8
+```
 
 Configurer l'adresse ip de l'interface LAN sur le routeur:
 
+```yaml
 conf t
-
 interface FastEthernet0/0
-
 ip address 10.2.1.254 255.255.255.0
-
 no shutdown
+```
 
 Activer la NAT pour router les paquets du LAN vers Internet:
 
+```yaml
 conf t
-
 interface FastEthernet0/0
-
 ip nat inside
-
 interface FastEthernet1/0
-
 ip nat outside
-
 exit
-
 access-list 1 permit any
-
 ip nat inside source list 1 interface FastEthernet1/0 overload
-
 exit
-
 copy running-config startup-config
-
+```
 
 On check depuis routeur et vpcs: ping 1.1.1.1
 
@@ -122,35 +98,27 @@ sudo systemctl stop dnsmasq
 
 sudo nano /etc/dnsmasq.conf:
 
+```yaml
 interface=enp0s8
-
 dhcp-range=10.2.1.220,10.2.1.230
-
 dhcp-option=3,10.2.1.254
-
 dhcp-option=6,1.1.1.1
+```
 
 sudo nano /etc/netplan/01-network-manager-all.yaml:
 
+```yaml
 network:
-
   version: 2
-
   renderer: NetworkManager
-
   ethernets:
-
     enp0s8:
-
       addresses:
-
         - 10.2.1.113/24
-
       routes:
-
         - to: default
-        
           via: 10.2.1.254
+```
 
 netplan apply
 
