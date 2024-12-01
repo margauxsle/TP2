@@ -129,3 +129,31 @@ sudo sysctl -w net.ipv4.ip_forward=1    (pour router paquets)
 on déconnecte le serveur dhcp légitime
 
 on crée un nouveau VPCS, cmd "dhcp" => notre serveur illégitime lui donne une ip et lui dit qu'on est sa gateway
+
+## III. Remédiations
+
+### Attaques DHCP
+
+1. Configurez les équipements réseau pour bloquer les réponses DHCP non autorisées
+
+2. Utiliser des outils de monitoring
+
+3. isolez le trafic DHCP dans un VLAN
+
+4. Restreindre le nombre d'adresses MAC autorisées par port sur le switch
+
+### Attaques ARP
+
+1. S'assurer que seules les réponses ARP légitimes sont acceptées par notre réseau
+
+2. Configurez manuellement les adresses ip et mac pour les équipements importants
+
+3. Utilisez des outils pour surveiller les modifications suspectes dans le réseau
+
+### DNS Spoofing
+
+2. Configurez nos appareils pour qu'ils utilisent des serveurs DNS sûrs
+
+3. Protégez le réseau en bloquant les requêtes DNS suspectes
+
+4. Utilisez DNS over HTTPS pour chiffrer les requêtes DNS et empêcher qu'elles soient interceptées
